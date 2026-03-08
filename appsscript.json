@@ -1,0 +1,18 @@
+{
+  "timeZone": "America/Chicago",
+  "dependencies": {
+    "libraries": []
+  },
+  "exceptionLogging": "STACKDRIVER",
+  "runtimeVersion": "V8",
+  "dataStudio": {
+    "name": "github PRs",
+    "logoUrl": "https://raw.githubusercontent.com/npm/logos/master/npm%20square/n-64.png",
+    "company": "Exognoposis",
+    "companyUrl": "https://www.exognoposis.com",
+    "addonUrl": "https://github.com/googledatastudio/community-connectors/tree/master/npm-downloads#readme",
+    "supportUrl": "https://github.com/googledatastudio/community-connectors/issues",
+    "description": "Get GitHub PRs.",
+    "sources": ["GITHUB"]
+  }
+}
