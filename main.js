@@ -41,7 +41,15 @@ function getAuthType() {
 }
 
 function getConfig() {
-  return cc.getConfig().build();
+  var config = cc.getConfig();
+
+  config.newTextInput()
+    .setId('repositories')
+    .setName('Enter a single repository or multiple repositories separated by commas (no spaces!)')
+    .setHelpText('e.g. gmgutt/gutt.dev')
+    .setAllowOverride(true);
+
+  return config.build();
 }
 
 function getFields() {
@@ -78,14 +86,17 @@ function getData(request) {
 
   let requestedFields = request.fields.map(function(field) { return field.name; });
 
-  let a = parseRepo('mpstls-ui-navigator', requestedFields);
-  let b = parseRepo('mpstls-api-navigator', requestedFields);
-  let c = parseRepo('mpstls-logs-navigator', requestedFields);
-  let d = parseRepo('playwrightAPINav', requestedFields);
+  let repos = request.configParams.repositories.split(",");
 
+  let rows = [];
+
+  for (var i = 0; i < repos.length; i++) {
+    let row = parseRepo(repos[i], requestedFields);
+    rows = rows.concat(row);
+  }
   return {
     'schema': getFields().forIds(requestedFields).build(),
-    'rows': a.concat(b).concat(c).concat(d),
+    'rows': rows,
     'filterApplied': false
   }
 }
@@ -101,7 +112,7 @@ function parseRepo(repo, fields) {
   let rows = [];
 
   for (var page = 1; lastCount > 0; page++) {
-    var url = `https://api.github.com/repos/mckesson/${repo}/pulls?state=closed&per_page=100&page=${page}`;
+    var url = `https://api.github.com/repos/${repo}/pulls?state=closed&per_page=100&page=${page}`;
     var options = {
       'headers': {
         'Authorization': `Bearer ${creds}`,
@@ -121,14 +132,6 @@ function parseRepo(repo, fields) {
     for (i = 0; i < jsonData.length; i++) {
         let pr = jsonData[i];
         let user = pr?.user?.login;
-
-        // let row = `${repo}, ${user}, ${pr.merged_at.substring(0,10).replace('-','')}, ${pr.title}`;
-        // console.log(row);
-
-        // let row = Array.of(repo, user, pr.merged_at.substring(0,10).replaceAll('-',''));
-        // if (fields.includes('title')) {
-        //   row.push(pr.title);
-        // }
 
         let row = fields.map(function(fieldName) {
           switch (fieldName) {
