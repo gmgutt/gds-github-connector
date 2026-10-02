@@ -10,6 +10,9 @@ The [Pull Request API](https://docs.github.com/en/rest/pulls/pulls?apiVersion=20
 | title | pull request title |
 | merged | date the pull request was merged |
 
+## Access Token
+Make sure that any PAT has been provided access to the repositories requested.
+
 ## Looker Studio Community Connectors
 
 https://developers.google.com/looker-studio/connector/get-started
